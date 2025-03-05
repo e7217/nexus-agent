@@ -1,47 +1,47 @@
-# 예시 레이블 설정
-# 파일 경로 패턴에 따라 PR에 자동으로 레이블을 추가합니다
-
-# 프론트엔드 관련 변경사항
-frontend:
-  - src/components/**/*
-  - src/pages/**/*
-  - src/styles/**/*
-  - '**/*.css'
-  - '**/*.scss'
-  - '**/*.js'
-  - '**/*.jsx'
-  - '**/*.ts'
-  - '**/*.tsx'
-
-# 백엔드 관련 변경사항
-backend:
-  - src/api/**/*
-  - src/models/**/*
-  - src/controllers/**/*
-  - src/routes/**/*
-  - '**/*.py'
-  - '**/*.go'
-  - '**/*.java'
-
 # 문서 관련 변경사항
 documentation:
-  - '**/*.md'
-  - docs/**/*
-  - README.md
-
-# 설정 파일 관련 변경사항
-configuration:
-  - .github/**/*
-  - '**/*.yml'
-  - '**/*.yaml'
-  - '**/*.json'
-  - '**/*.config.js'
-  - '**/*.config.ts'
+- changed-files:
+  - any-glob-to-any-file:
+    - 'docs/**/*'
+    - '**/*.md'
+    - '**/*.mdx'
 
 # 테스트 관련 변경사항
 tests:
-  - tests/**/*
-  - '**/*.test.js'
-  - '**/*.test.ts'
-  - '**/*.spec.js'
-  - '**/*.spec.ts' 
+- changed-files:
+  - any-glob-to-any-file:
+    - 'tests/**/*'
+    - '**/*.test.*'
+    - '**/*.spec.*'
+
+# 설정 파일 변경사항
+configuration:
+- changed-files:
+  - any-glob-to-any-file:
+    - '.github/**/*'
+    - '*.json'
+    - '*.yml'
+    - '*.yaml'
+    - '.env.example'
+
+# 소스 코드 변경사항
+enhancement:
+- changed-files:
+  - any-glob-to-any-file:
+    - 'src/**/*'
+    - 'app/**/*'
+    - 'example/**/*'
+    - '**/*.py'
+    - '**/*.js'
+    - '**/*.ts' 
+
+# Add 'feature' label to any PR where the head branch name starts with `feature` or has a `feature` section in the name
+feature:
+ - head-branch: ['^feat', 'feat']
+
+bug:
+ - head-branch: ['^fix', 'fix']
+
+# # Add 'release' label to any PR that is opened against the `main` branch
+# release:
+#  - base-branch: 'main'
