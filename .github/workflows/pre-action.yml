@@ -9,18 +9,6 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-  labeler:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-
-    steps:
-    - uses: actions/labeler@v5
-      with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        sync-labels: true
-        configuration-path: .github/labeler.yml
   code-review:
     runs-on: ubuntu-latest
     permissions:
@@ -33,3 +21,15 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           LANGUAGE: Korean 
           MODEL: gpt-4o-mini
+
+  labeler:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+    - uses: actions/labeler@v5
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        sync-labels: true
+        # configuration-path: .github/labeler.yml
