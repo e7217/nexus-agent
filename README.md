@@ -13,22 +13,32 @@
 넥서스 에이전트 팀은 다음과 같은 특별한 멤버들로 구성되어 있습니다:
 
 ### 🕵️ 데이터 수집 에이전트
+
 *"세상의 모든 주식 데이터는 내가 찾아낸다!"*  
 뉴스, 주가, 재무제표, 소셜 미디어까지 - 투자에 필요한 모든 데이터를 끊임없이 수집합니다.
 
 ### 📊 시장 분석 에이전트
+
 *"숫자 뒤에 숨겨진 패턴을 읽어내는 마법사"*  
 거시경제 지표부터 개별 기업 분석까지, 시장의 큰 그림과 세부 사항을 동시에 분석합니다.
 
+** 관련 링크 **
+- [FinanceDataReader](https://github.com/FinanceData/FinanceDataReader) : 주가 정보, 아마 일봉까지만 되었던 것으로 기억 (분봉 단위는 증권사 API 이용)
+- [OpenDartReader](https://github.com/FinanceData/OpenDartReader) : 기업 정보, 재무제표 등
+- [그외 라이브러리](https://wikidocs.net/230305) : 금융 관련 라이브러리 리스트
+
 ### 🔮 패턴 분석 에이전트
+
 *"역사는 반복된다, 그리고 나는 그 패턴을 찾아낸다"*  
 과거 데이터에서 주기적 패턴과 변동성을 탐지하여 미래 움직임을 예측합니다.
 
 ### 📝 보고서 생성 에이전트
+
 *"복잡한 데이터를 명쾌한 스토리로 바꾸는 작가"*  
 다른 에이전트들의 분석 결과를 종합하여 읽기 쉽고 actionable한 보고서를 작성합니다.
 
 ### ⚖️ 신뢰도 평가 에이전트
+
 *"냉정한 평가자, 우리의 실수로부터 배운다"*  
 과거 예측과 실제 결과를 비교하여 시스템의 신뢰도를 지속적으로 개선합니다.
 
@@ -50,20 +60,24 @@
 - **API 서버**: FastAPI
 - **이벤트 처리**: Kafka + Redis Streams
 - **데이터베이스**: PostgreSQL, MongoDB, Pinecone
-- **AI 모델**: OpenAI API, LLama 3.1 8B
+- **AI 모델**: OpenAI API
 - **배포**: Docker + Kubernetes
 
 ## 🚀 시작하기
 
 ```bash
 # 저장소 클론
-git clone https://github.com/your-username/nexus-agent.git
+git clone https://github.com/e7217/nexus-agent.git
 
 # 디렉토리 이동
 cd nexus-agent
 
-# 의존성 설치
+# 의존성 설치 (pip 사용)
 pip install -r requirements.txt
+
+# 또는 uv를 사용한 더 빠른 의존성 설치
+# uv가 설치되어 있지 않다면: pip install uv
+uv pip install -r requirements.txt
 
 # 설정 파일 생성
 cp config.example.yaml config.yaml
@@ -72,6 +86,9 @@ cp config.example.yaml config.yaml
 # 시스템 실행
 python main.py
 ```
+
+## :tools 활용 가능한 도구들
+https://wikidocs.net/book/14021
 
 ## 🔮 미래 계획
 
