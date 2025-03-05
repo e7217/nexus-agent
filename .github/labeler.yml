@@ -1,0 +1,47 @@
+# 예시 레이블 설정
+# 파일 경로 패턴에 따라 PR에 자동으로 레이블을 추가합니다
+
+# 프론트엔드 관련 변경사항
+frontend:
+  - src/components/**/*
+  - src/pages/**/*
+  - src/styles/**/*
+  - '**/*.css'
+  - '**/*.scss'
+  - '**/*.js'
+  - '**/*.jsx'
+  - '**/*.ts'
+  - '**/*.tsx'
+
+# 백엔드 관련 변경사항
+backend:
+  - src/api/**/*
+  - src/models/**/*
+  - src/controllers/**/*
+  - src/routes/**/*
+  - '**/*.py'
+  - '**/*.go'
+  - '**/*.java'
+
+# 문서 관련 변경사항
+documentation:
+  - '**/*.md'
+  - docs/**/*
+  - README.md
+
+# 설정 파일 관련 변경사항
+configuration:
+  - .github/**/*
+  - '**/*.yml'
+  - '**/*.yaml'
+  - '**/*.json'
+  - '**/*.config.js'
+  - '**/*.config.ts'
+
+# 테스트 관련 변경사항
+tests:
+  - tests/**/*
+  - '**/*.test.js'
+  - '**/*.test.ts'
+  - '**/*.spec.js'
+  - '**/*.spec.ts' 
