@@ -890,6 +890,11 @@ dependencies = [
     { name = "tavily-python" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "ruff" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "langchain", specifier = ">=0.3.20" },
@@ -900,6 +905,9 @@ requires-dist = [
     { name = "ruff", specifier = ">=0.9.9" },
     { name = "tavily-python", specifier = ">=0.5.1" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "ruff", specifier = ">=0.9.9" }]
 
 [[package]]
 name = "numpy"
