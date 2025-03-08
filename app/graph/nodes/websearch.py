@@ -3,7 +3,8 @@ from langchain_openai.chat_models.base import ChatOpenAI
 from app.graph.nodes.base import Node
 from app.utils.tools import ToolSet
 
-# TODO : 프롬프트 변경사항이 있다면 자체 반영 
+
+# TODO : 프롬프트 변경사항이 있다면 자체 반영
 class WebSearchNode(Node):
     def __init__(self):
         super().__init__()
@@ -14,7 +15,7 @@ class WebSearchNode(Node):
     def _run(self, state: dict) -> dict:
         self.logger.info(f"hash : {self.__hash__()}")
         self.logger.info(f"Running WebSearchNode with state: {state}")
-        
+
         state["messages"] = [self.llm.invoke(state["messages"])]
         return state
-        # return {"messages": [self.llm.invoke(state["messages"])]}        
+        # return {"messages": [self.llm.invoke(state["messages"])]}

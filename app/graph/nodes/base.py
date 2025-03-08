@@ -5,6 +5,7 @@ from functools import wraps
 
 def log_steps(func):
     logger = logging.getLogger("nexus-agent")
+
     @wraps(func)
     def wrapper(self, *args, **kwargs):
         logger.info(f"Starting {self.__class__.__name__}...")
@@ -14,9 +15,11 @@ def log_steps(func):
 
     return wrapper
 
+
 # TODO : singletone 로거 적용
 # TODO : 노드 실행 시간 측정
-# TODO : 에이전트의 기능 구현시 노드 내에서 완료 또는 노드+서비스 
+# TODO : 에이전트의 기능 구현시 노드 내에서 완료 또는 노드+서비스
+
 
 class Node(ABC):
     _instance = None
@@ -25,10 +28,7 @@ class Node(ABC):
 
     def __call__(self, *args, **kwargs):
         return self._run(*args, **kwargs)
-        
+
     @log_steps
     @abstractmethod
-    def _run(self, *args, **kwargs):
-        ...
-        
-        
+    def _run(self, *args, **kwargs): ...
