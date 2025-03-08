@@ -105,23 +105,25 @@
 
 ## 🚀 시작하기
 
+** using uv(recommended) **
+```bash
+git clone https://github.com/e7217/nexus-agent
+
+uv sync
+
+uv run main.py
+```
+
+** using pip ** 
 ```bash
 # 저장소 클론
-git clone https://github.com/e7217/nexus-agent.git
+git clone https://github.com/e7217/nexus-agent
 
 # 디렉토리 이동
 cd nexus-agent
 
 # 의존성 설치 (pip 사용)
 pip install -r requirements.txt
-
-# 또는 uv를 사용한 더 빠른 의존성 설치
-# uv가 설치되어 있지 않다면: pip install uv
-uv pip install -r requirements.txt
-
-# 설정 파일 생성
-cp config.example.yaml config.yaml
-# config.yaml 파일을 편집하여 API 키 등을 설정하세요
 
 # 시스템 실행
 python main.py
