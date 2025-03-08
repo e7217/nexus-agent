@@ -22,9 +22,11 @@ class SupervisorNode(Node):
     def system_prompt(self):
         return self.system_prompt_template.format(members=", ".join(self.members))
 
-    def __call__(self, state: dict) -> dict:
+    def _run(self, state: dict) -> dict:
         llm = state["llm"]
         self.members = state["members"]
+
+        self.logger.info(f"prompt: {self.system_prompt}")
 
         messages = [
             {"role": "system", "content": self.system_prompt},
@@ -35,8 +37,12 @@ class SupervisorNode(Node):
         if goto == "FINISH":
             goto = END
 
-        return Command(goto=goto, update={"next": goto})
-
+        return Command(
+            goto=goto,
+            update={
+                "next": goto,
+            }
+        )
 
 class Router(TypedDict):
     next: list[str]
