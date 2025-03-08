@@ -105,7 +105,7 @@
 
 ## 🚀 시작하기
 
-** using uv(recommended) **
+**using uv(recommended)**
 ```bash
 git clone https://github.com/e7217/nexus-agent
 
@@ -114,7 +114,7 @@ uv sync
 uv run main.py
 ```
 
-** using pip ** 
+**using pip** 
 ```bash
 # 저장소 클론
 git clone https://github.com/e7217/nexus-agent
