@@ -12,3 +12,4 @@ class SimpleState(TypedDict):
 
 class SupervisorState(MessagesState):
     llm: Any
+    members: list[str]

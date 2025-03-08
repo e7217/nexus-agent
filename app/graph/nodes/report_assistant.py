@@ -11,9 +11,9 @@ class ReportAssistantNode(Node):
         super().__init__()
         self.agent = None
 
-    def __call__(self, state: dict) -> dict:
+    def _run(self, state: dict) -> dict:
         if self.agent is None:
-            tools = [WriteFileTool]
+            tools = [WriteFileTool()]
             llm = state["llm"]
             self.agent = create_react_agent(
                 llm,

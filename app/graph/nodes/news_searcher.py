@@ -15,14 +15,14 @@ class NewsSearcherNode(Node):
         )
         self.agent = None
 
-    def __call__(self, state: dict) -> dict:
+    def _run(self, state: dict) -> dict:
         if self.agent is None:
             tools = [TavilySearchResults(max_results=2)]
             llm = state["llm"]
             self.agent = create_react_agent(
                 llm,
                 tools,
-                system_prompt=self.system_prompt,
+                prompt=self.system_prompt,
             )
         result = self.agent.invoke(state)
         return Command(
