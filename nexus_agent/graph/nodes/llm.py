@@ -1,4 +1,4 @@
-from app.graph.nodes.base import Node
+from nexus_agent.graph.nodes.base import Node
 from langchain_openai import ChatOpenAI
 
 # TODO : 모델을 환경변수로 받을 지, 체인에서 받을 지 생각해보기

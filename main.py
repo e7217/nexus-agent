@@ -7,16 +7,16 @@ from langgraph.prebuilt import ToolNode, tools_condition
 
 from dotenv import load_dotenv
 
-from app.graph.nodes.websearch import WebSearchNode
-from app.graph.nodes import (
+from nexus_agent.graph.nodes.websearch import WebSearchNode
+from nexus_agent.graph.nodes import (
     SupervisorNode,
     NewsSearcherNode,
     CommunitySearcherNode,
     ReportAssistantNode,
 )
-from app.models.graph import SimpleState, SupervisorState
-from app.utils.tools import ToolSet
-from app.utils.logger import setup_logger
+from nexus_agent.models.graph import SimpleState, SupervisorState
+from nexus_agent.utils.tools import ToolSet
+from nexus_agent.utils.logger import setup_logger
 
 load_dotenv(override=True)
 

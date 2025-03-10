@@ -3,7 +3,7 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 from langgraph.types import Command
 from langchain_core.messages import HumanMessage
 
-from app.graph.nodes.base import Node
+from nexus_agent.graph.nodes.base import Node
 
 
 class CommunitySearcherNode(Node):
