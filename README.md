@@ -109,6 +109,8 @@
 ```bash
 git clone https://github.com/e7217/nexus-agent
 
+cd nexus-agent
+
 uv sync
 
 uv run main.py
