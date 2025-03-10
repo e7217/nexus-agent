@@ -32,7 +32,7 @@ def setup_logger(name: str = None) -> logging.Logger:
 
     # 파일 핸들러 (rotating)
     file_handler = RotatingFileHandler(
-        "app.log",
+        "nexus_agent.log",
         maxBytes=10 * 1024 * 1024,  # 10MB
         backupCount=5,
     )

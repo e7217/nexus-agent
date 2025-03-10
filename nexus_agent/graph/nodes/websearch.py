@@ -1,7 +1,7 @@
 from langchain_openai.chat_models.base import ChatOpenAI
 
-from app.graph.nodes.base import Node
-from app.utils.tools import ToolSet
+from nexus_agent.graph.nodes.base import Node
+from nexus_agent.utils.tools import ToolSet
 
 
 # TODO : 프롬프트 변경사항이 있다면 자체 반영

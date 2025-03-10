@@ -1,4 +1,4 @@
-from app.graph.nodes.base import Node
+from nexus_agent.graph.nodes.base import Node
 
 
 class GeneratorNode(Node):
