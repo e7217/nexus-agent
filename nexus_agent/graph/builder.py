@@ -17,23 +17,20 @@ from nexus_agent.utils.tools import ToolSet
 from nexus_agent.utils.logger import setup_logger
 
 logger = setup_logger("nexus_agent")
+
+
 class GraphBuilder:
-    
-    def __init__(cls):
-        ...
-        
-    def _build(cls) -> CompiledStateGraph:
-        ...
-        
-    def build_from_dict(cls, graph_dict: dict) -> CompiledStateGraph:
-        ...
-        
-    def build_from_json(cls, json_path: str) -> CompiledStateGraph:
-        ...
-        
-    def build_from_yaml(cls, yaml_path: str) -> CompiledStateGraph:
-        ...
-        
+    def __init__(cls): ...
+
+    def _build(cls) -> CompiledStateGraph: ...
+
+    def build_from_dict(cls, graph_dict: dict) -> CompiledStateGraph: ...
+
+    def build_from_json(cls, json_path: str) -> CompiledStateGraph: ...
+
+    def build_from_yaml(cls, yaml_path: str) -> CompiledStateGraph: ...
+
+
 class BuilderABC(ABC):
     @abstractmethod
     def build(self) -> Self: ...
@@ -43,6 +40,7 @@ class BuilderABC(ABC):
 
     @abstractmethod
     def run(self): ...
+
 
 # TODO: 동적 빌더로 변경
 class LanggraphBuilder(BuilderABC):
@@ -84,6 +82,7 @@ class LanggraphBuilder(BuilderABC):
 
     def run(self): ...
 
+
 # TODO: 동적 빌더로 변경
 class SupervisorGraphBuilder(BuilderABC):
     def __init__(self):
@@ -91,7 +90,6 @@ class SupervisorGraphBuilder(BuilderABC):
         self._graph = None
         self.logger = logger
         # TODO: OPENAI 라이브러리 처리
-
 
     def build(self) -> Self:
         self.logger.info("Building graph...")
@@ -115,7 +113,6 @@ class SupervisorGraphBuilder(BuilderABC):
         return self
 
     def execute(self, state: SupervisorState) -> Any:
-        
         state["members"] = self.members
 
         self.logger.info(f"Executing graph with state: {state}")

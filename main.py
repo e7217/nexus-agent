@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 import argparse
-import sys
 
 from nexus_agent.models.graph import SupervisorState
 from nexus_agent.utils.logger import setup_logger
@@ -11,6 +10,7 @@ load_dotenv(override=True)
 
 logger = setup_logger("nexus_agent")
 
+
 def run_example():
     """예제 쿼리를 실행합니다."""
     logger.info("Starting Nexus Agent example...")
@@ -19,13 +19,23 @@ def run_example():
     import datetime as dt
 
     from langchain_openai import ChatOpenAI
+
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
 
     today = dt.datetime.now().strftime("%Y-%m-%d")
     # answer = app.execute(SimpleState(messages=[("user", f"{today} 일자의 삼성전자 관련 경제 뉴스를 알려줘.")]))
-    answer = app.execute(SupervisorState(llm = llm, messages=[("user", f"{today} 일자의 삼정전자와 관련된 주요 뉴스는 무엇이 있을까? 방송사 CNN의 뉴스 페이지를 참고해서 알려줘")]))
+    answer = app.execute(
+        SupervisorState(
+            llm=llm,
+            messages=[
+                (
+                    "user",
+                    f"{today} 일자의 삼정전자와 관련된 주요 뉴스는 무엇이 있을까? 방송사 CNN의 뉴스 페이지를 참고해서 알려줘",
+                )
+            ],
+        )
+    )
     # answer = app.execute(SupervisorState(messages=[("user", f"3 더하기 2는?")]))
-    
 
     # answer = app.execute(
     #     SupervisorState(
@@ -40,13 +50,16 @@ def run_example():
     # )
     logger.info(f"Final answer: {answer}")
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Nexus Agent - 주식 시장 분석을 위한 AI 에이전트 네트워크")
+    parser = argparse.ArgumentParser(
+        description="Nexus Agent - 주식 시장 분석을 위한 AI 에이전트 네트워크"
+    )
     parser.add_argument("--server", action="store_true", help="백엔드 서버 모드로 실행")
     parser.add_argument("--example", action="store_true", help="예제 쿼리 실행")
-    
+
     args = parser.parse_args()
-    
+
     if args.server:
         logger.info("Starting Nexus Agent in server mode...")
         start_server()

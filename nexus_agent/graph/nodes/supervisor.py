@@ -41,8 +41,9 @@ class SupervisorNode(Node):
             goto=goto,
             update={
                 "next": goto,
-            }
+            },
         )
+
 
 class Router(TypedDict):
     next: list[str]

@@ -25,9 +25,9 @@ class NewsSearcherNode(Node):
                 prompt=self.system_prompt,
             )
         result = self.agent.invoke(state)
-        
+
         self.logger.info(f"NewsSearcherNode result: \n{result['messages'][-1].content}")
-        
+
         return Command(
             update={
                 "messages": [

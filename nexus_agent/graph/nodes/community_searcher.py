@@ -26,7 +26,9 @@ class CommunitySearcherNode(Node):
                 prompt=self.system_prompt,
             )
         result = self.agent.invoke(state)
-        self.logger.info(f"CommunitySearcherNode result: \n{result['messages'][-1].content}")
+        self.logger.info(
+            f"CommunitySearcherNode result: \n{result['messages'][-1].content}"
+        )
         return Command(
             update={
                 "messages": [

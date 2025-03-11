@@ -1,26 +1,26 @@
 from abc import ABC, abstractmethod
-import logging
 from functools import wraps
 import time
 from rich.console import Console
-import sys
 
 from nexus_agent.utils.logger import setup_logger
 
 
 console = Console()
+
+
 def log_steps(func):
     @wraps(func)
     def wrapper(self, *args, **kwargs):
         console.print("\n" + "=" * (console.width))
         logger = setup_logger(f"nexus_agent.nodes.{self.__class__.__name__.lower()}")
         logger.info(f"Starting {self.__class__.__name__}...")
-        
+
         start_time = time.time()
-        
+
         # 함수 실행
         result = func(self, *args, **kwargs)
-        
+
         end_time = time.time()
         execution_time = end_time - start_time
 
@@ -40,7 +40,6 @@ def log_steps(func):
 
 
 class Node(ABC):
-    
     def __init__(self):
         self._instance = None
         self._logger_name = f"nexus_agent.nodes.{self.__class__.__name__.lower()}"

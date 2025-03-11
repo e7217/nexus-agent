@@ -1,8 +1,7 @@
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
-import logging
+from typing import Optional
 import datetime as dt
 from langchain_openai import ChatOpenAI
 
@@ -33,21 +32,25 @@ app.add_middleware(
 builder = SupervisorGraphBuilder()
 graph = builder.build()
 
+
 # 요청 모델 정의
 class QueryRequest(BaseModel):
     query: str
     model: Optional[str] = "gpt-4o-mini"
     temperature: Optional[float] = 0.2
 
+
 # 응답 모델 정의
 class QueryResponse(BaseModel):
     answer: str
     timestamp: str
 
+
 @app.get("/")
 async def root():
     """API 상태 확인 엔드포인트"""
     return {"status": "online", "message": "Nexus Agent API is running"}
+
 
 @app.post("/api/query", response_model=QueryResponse)
 async def process_query(request: QueryRequest):
@@ -56,30 +59,28 @@ async def process_query(request: QueryRequest):
     """
     try:
         logger.info(f"Received query: {request.query}")
-        
+
         # LLM 인스턴스 생성
         llm = ChatOpenAI(model=request.model, temperature=request.temperature)
-        
-        # 현재 날짜 가져오기
-        today = dt.datetime.now().strftime("%Y-%m-%d")
-        
+
         # 그래프 실행
         state = SupervisorState(llm=llm, messages=[("user", request.query)])
         answer = graph.execute(state)
-        
+
         logger.info(f"Generated answer for query: {request.query}")
-        
+
         # 응답 생성
         response = QueryResponse(
             answer=answer["messages"][-1].content,
-            timestamp=dt.datetime.now().isoformat()
+            timestamp=dt.datetime.now().isoformat(),
         )
-        
+
         return response
-    
+
     except Exception as e:
         logger.error(f"Error processing query: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
+
 
 @app.get("/api/health")
 async def health_check():
@@ -87,8 +88,9 @@ async def health_check():
     return {
         "status": "healthy",
         "timestamp": dt.datetime.now().isoformat(),
-        "version": app.version
+        "version": app.version,
     }
+
 
 # 미들웨어: 요청 로깅
 @app.middleware("http")
@@ -97,19 +99,24 @@ async def log_requests(request: Request, call_next):
     start_time = dt.datetime.now()
     response = await call_next(request)
     process_time = (dt.datetime.now() - start_time).total_seconds() * 1000
-    
+
     logger.info(
         f"Request: {request.method} {request.url.path} - "
         f"Status: {response.status_code} - "
         f"Process Time: {process_time:.2f}ms"
     )
-    
+
     return response
+
 
 def start_server():
     """서버 시작 함수"""
     import uvicorn
-    uvicorn.run("nexus_agent.services.backend:app", host="0.0.0.0", port=8000, reload=True)
+
+    uvicorn.run(
+        "nexus_agent.services.backend:app", host="0.0.0.0", port=8000, reload=True
+    )
+
 
 if __name__ == "__main__":
-    start_server() 
+    start_server()
