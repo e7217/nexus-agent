@@ -2,6 +2,7 @@ from typing import TypedDict, Annotated, Any
 
 from langgraph.graph import add_messages, MessagesState
 
+
 class SimpleState(TypedDict):
     input: str
     model_name: str
