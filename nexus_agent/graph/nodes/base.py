@@ -1,34 +1,54 @@
 from abc import ABC, abstractmethod
 import logging
 from functools import wraps
+import time
+from rich.console import Console
+import sys
+
+from nexus_agent.utils.logger import setup_logger
 
 
+console = Console()
 def log_steps(func):
-    logger = logging.getLogger("nexus-agent")
-
     @wraps(func)
     def wrapper(self, *args, **kwargs):
+        console.print("\n" + "=" * (console.width))
+        logger = setup_logger(f"nexus_agent.nodes.{self.__class__.__name__.lower()}")
         logger.info(f"Starting {self.__class__.__name__}...")
+        
+        start_time = time.time()
+        
+        # 함수 실행
         result = func(self, *args, **kwargs)
-        logger.info(f"{self.__class__.__name__} completed successfully.")
+        
+        end_time = time.time()
+        execution_time = end_time - start_time
+
+        logger.info(
+            f"{self.__class__.__name__} completed successfully. "
+            f"(실행 시간: {execution_time:.4f}초)"
+        )
+        console.print("=" * (console.width) + "\n")
+
         return result
 
     return wrapper
 
 
 # TODO : singletone 로거 적용
-# TODO : 노드 실행 시간 측정
 # TODO : 에이전트의 기능 구현시 노드 내에서 완료 또는 노드+서비스
 
 
 class Node(ABC):
-    _instance = None
-    _logger_name = "nexus-agent"
-    logger = logging.getLogger(_logger_name)
+    
+    def __init__(self):
+        self._instance = None
+        self._logger_name = f"nexus_agent.nodes.{self.__class__.__name__.lower()}"
+        self.logger = setup_logger(self._logger_name)
 
+    @log_steps
     def __call__(self, *args, **kwargs):
         return self._run(*args, **kwargs)
 
-    @log_steps
     @abstractmethod
     def _run(self, *args, **kwargs): ...

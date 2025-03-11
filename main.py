@@ -1,17 +1,19 @@
 from dotenv import load_dotenv
+import argparse
+import sys
 
 from nexus_agent.models.graph import SupervisorState
 from nexus_agent.utils.logger import setup_logger
 from nexus_agent.graph.builder import SupervisorGraphBuilder
+from nexus_agent.services.backend import start_server
 
 load_dotenv(override=True)
 
 logger = setup_logger("nexus_agent")
 
-
-
-if __name__ == "__main__":
-    logger.info("Starting Nexus Agent...")
+def run_example():
+    """예제 쿼리를 실행합니다."""
+    logger.info("Starting Nexus Agent example...")
     builder = SupervisorGraphBuilder()
     app = builder.build()
     import datetime as dt
@@ -37,3 +39,19 @@ if __name__ == "__main__":
     #     )
     # )
     logger.info(f"Final answer: {answer}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Nexus Agent - 주식 시장 분석을 위한 AI 에이전트 네트워크")
+    parser.add_argument("--server", action="store_true", help="백엔드 서버 모드로 실행")
+    parser.add_argument("--example", action="store_true", help="예제 쿼리 실행")
+    
+    args = parser.parse_args()
+    
+    if args.server:
+        logger.info("Starting Nexus Agent in server mode...")
+        start_server()
+    elif args.example:
+        run_example()
+    else:
+        # 인자가 없으면 예제 실행
+        run_example()
