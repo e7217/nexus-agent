@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import argparse
 
 from nexus_agent.models.graph import SupervisorState
+from nexus_agent.utils import logo
 from nexus_agent.utils.logger import setup_logger
 from nexus_agent.graph.builder import SupervisorGraphBuilder
 from nexus_agent.services.backend import start_server
@@ -51,7 +52,9 @@ def run_example():
     logger.info(f"Final answer: {answer}")
 
 
+
 if __name__ == "__main__":
+    
     parser = argparse.ArgumentParser(
         description="Nexus Agent - 주식 시장 분석을 위한 AI 에이전트 네트워크"
     )
@@ -59,7 +62,7 @@ if __name__ == "__main__":
     parser.add_argument("--example", action="store_true", help="예제 쿼리 실행")
 
     args = parser.parse_args()
-
+    print(logo.logo)
     if args.server:
         logger.info("Starting Nexus Agent in server mode...")
         start_server()
