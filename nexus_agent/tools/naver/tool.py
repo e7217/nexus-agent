@@ -15,6 +15,7 @@ from nexus_agent.tools.naver.naver_search import NaverSearchAPIWrapper
 
 class NaverInput(BaseModel):
     """Input for the Naver search tool."""
+
     query: str = Field(description="search query to look up")
 
 
@@ -101,7 +102,7 @@ class NaverSearchResults(BaseTool):
 
 class NaverNewsSearch(NaverSearchResults):
     """Tool specialized for Naver News search."""
-    
+
     name: str = "naver_news_search"
     description: str = (
         "A search engine for Korean news using Naver's search API. "
@@ -113,7 +114,7 @@ class NaverNewsSearch(NaverSearchResults):
 
 class NaverBlogSearch(NaverSearchResults):
     """Tool specialized for Naver Blog search."""
-    
+
     name: str = "naver_blog_search"
     description: str = (
         "A search engine for Korean blogs using Naver's search API. "
@@ -125,7 +126,7 @@ class NaverBlogSearch(NaverSearchResults):
 
 class NaverWebSearch(NaverSearchResults):
     """Tool specialized for Naver Web search."""
-    
+
     name: str = "naver_web_search"
     description: str = (
         "A general web search engine for Korean websites using Naver's search API. "

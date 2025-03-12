@@ -1,5 +1,4 @@
 from langgraph.prebuilt import create_react_agent
-from langchain_community.tools.tavily_search import TavilySearchResults
 from langgraph.types import Command
 from langchain_core.messages import HumanMessage
 
@@ -27,9 +26,7 @@ class NaverNewsSearcherNode(Node):
                 prompt=self.system_prompt,
             )
         result = self.agent.invoke(state)
-        self.logger.info(
-            f"   result: \n{result['messages'][-1].content}"
-        )
+        self.logger.info(f"   result: \n{result['messages'][-1].content}")
         return Command(
             update={
                 "messages": [

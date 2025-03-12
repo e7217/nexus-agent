@@ -5,12 +5,11 @@ https://developers.naver.com/docs/serviceapi/search/news/news.md
 """
 
 import json
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 import urllib.request
 import urllib.parse
 
 import aiohttp
-import requests
 from langchain_core.utils import get_from_dict_or_env
 from pydantic import BaseModel, ConfigDict, SecretStr, model_validator
 
@@ -60,16 +59,18 @@ class NaverSearchAPIWrapper(BaseModel):
         """Get raw results from the Naver Search API."""
         enc_text = urllib.parse.quote(query, encoding="utf-8")
         url = f"{NAVER_API_URL}/{search_type}.json?query={enc_text}&display={display}&start={start}&sort={sort}"
-        
+
         request = urllib.request.Request(url)
         request.add_header("X-Naver-Client-Id", self.naver_client_id.get_secret_value())
-        request.add_header("X-Naver-Client-Secret", self.naver_client_secret.get_secret_value())
-        
+        request.add_header(
+            "X-Naver-Client-Secret", self.naver_client_secret.get_secret_value()
+        )
+
         response = urllib.request.urlopen(request)
         response_code = response.getcode()
-        
+
         if response_code == 200:
-            response_body = response.read().decode('utf-8')
+            response_body = response.read().decode("utf-8")
             return json.loads(response_body)
         else:
             raise Exception(f"Error Code: {response_code}")
@@ -90,7 +91,7 @@ class NaverSearchAPIWrapper(BaseModel):
             display: The number of results to return (max 100).
             start: The starting position for results.
             sort: The sort order (sim for similarity, date for date).
-            
+
         Returns:
             A list of dictionaries containing the cleaned search results.
         """
@@ -118,9 +119,9 @@ class NaverSearchAPIWrapper(BaseModel):
         async def fetch() -> str:
             headers = {
                 "X-Naver-Client-Id": self.naver_client_id.get_secret_value(),
-                "X-Naver-Client-Secret": self.naver_client_secret.get_secret_value()
+                "X-Naver-Client-Secret": self.naver_client_secret.get_secret_value(),
             }
-            
+
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, headers=headers) as response:
                     if response.status == 200:
@@ -156,18 +157,20 @@ class NaverSearchAPIWrapper(BaseModel):
         for result in results:
             # Remove HTML tags from title and description
             title = result.get("title", "").replace("<b>", "").replace("</b>", "")
-            description = result.get("description", "").replace("<b>", "").replace("</b>", "")
-            
+            description = (
+                result.get("description", "").replace("<b>", "").replace("</b>", "")
+            )
+
             clean_result = {
                 "title": title,
                 "link": result.get("link", ""),
                 "description": description,
             }
-            
+
             # Add optional fields if they exist
             for field in ["bloggername", "postdate", "pubDate"]:
                 if field in result:
                     clean_result[field] = result[field]
-                    
+
             clean_results.append(clean_result)
         return clean_results

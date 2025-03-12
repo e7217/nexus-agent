@@ -9,8 +9,6 @@ from nexus_agent.graph.nodes.naver_news_searcher import NaverNewsSearcherNode
 from nexus_agent.graph.nodes.websearch import WebSearchNode
 from nexus_agent.graph.nodes import (
     SupervisorNode,
-    NewsSearcherNode,
-    CommunitySearcherNode,
     ReportAssistantNode,
 )
 from nexus_agent.models.graph import SimpleState, SupervisorState
@@ -105,7 +103,7 @@ class SupervisorGraphBuilder(BuilderABC):
             # "news_searcher",
             # "community_searcher",
             "report_assistant",
-            "naver_news_searcher"
+            "naver_news_searcher",
         ]
 
         self._builder.add_edge(START, "supervisor")
