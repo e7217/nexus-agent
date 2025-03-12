@@ -5,11 +5,10 @@ from typing_extensions import Self
 
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
+from nexus_agent.graph.nodes.naver_news_searcher import NaverNewsSearcherNode
 from nexus_agent.graph.nodes.websearch import WebSearchNode
 from nexus_agent.graph.nodes import (
     SupervisorNode,
-    NewsSearcherNode,
-    CommunitySearcherNode,
     ReportAssistantNode,
 )
 from nexus_agent.models.graph import SimpleState, SupervisorState
@@ -95,14 +94,16 @@ class SupervisorGraphBuilder(BuilderABC):
         self.logger.info("Building graph...")
         self._builder = StateGraph(SupervisorState)
         self._builder.add_node("supervisor", SupervisorNode())
-        self._builder.add_node("news_searcher", NewsSearcherNode())
-        self._builder.add_node("community_searcher", CommunitySearcherNode())
+        # self._builder.add_node("news_searcher", NewsSearcherNode())
+        # self._builder.add_node("community_searcher", CommunitySearcherNode())
+        self._builder.add_node("naver_news_searcher", NaverNewsSearcherNode())
         self._builder.add_node("report_assistant", ReportAssistantNode())
 
         self.members = [
-            "news_searcher",
-            "community_searcher",
+            # "news_searcher",
+            # "community_searcher",
             "report_assistant",
+            "naver_news_searcher",
         ]
 
         self._builder.add_edge(START, "supervisor")
