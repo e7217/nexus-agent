@@ -2,14 +2,17 @@ from typing import List, Union, Generator, Iterator
 from pydantic import BaseModel
 import requests
 
+
 class RequestBody(BaseModel):
     query: str
     model: str
     temperature: float
 
+
 class ResponseBody(BaseModel):
     answer: str
     timestamp: str
+
 
 class Pipeline:
     class Valves(BaseModel):
@@ -49,7 +52,9 @@ class Pipeline:
         headers["Content-Type"] = "application/json"
 
         # payload = {**body}
-        payload = RequestBody(query=user_message, model="gpt-4o-mini", temperature=1.0).model_dump()
+        payload = RequestBody(
+            query=user_message, model="gpt-4o-mini", temperature=1.0
+        ).model_dump()
 
         try:
             r = requests.post(

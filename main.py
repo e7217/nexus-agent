@@ -1,73 +1,59 @@
 from dotenv import load_dotenv
-import argparse
 
-from nexus_agent.models.graph import SupervisorState
-from nexus_agent.utils import logo
+from dependency_injector.wiring import Provide, inject
+import uvicorn
+
+from api.server import APIBuilder
+from nexus_agent.graph.nodes.naver_news_searcher import NaverNewsSearcherNode
+from nexus_agent.graph.nodes.report_assistant import ReportAssistantNode
 from nexus_agent.utils.logger import setup_logger
 from nexus_agent.graph.builder import SupervisorGraphBuilder
-from nexus_agent.services.backend import start_server
+from startup import Container
+from rich.console import Console
 
+console = Console()
 load_dotenv(override=True)
-
 logger = setup_logger("nexus_agent")
+logo = """
+[cyan]
+==============================================================================================
+                                                                                              
+  ███    ██ ███████ ██   ██ ██    ██ ███████      █████   ██████  ███████ ███    ██ ████████  
+  ████   ██ ██       ██ ██  ██    ██ ██          ██   ██ ██       ██      ████   ██    ██     
+  ██ ██  ██ █████     ███   ██    ██ ███████     ███████ ██   ███ █████   ██ ██  ██    ██     
+  ██  ██ ██ ██       ██ ██  ██    ██      ██     ██   ██ ██    ██ ██      ██  ██ ██    ██     
+  ██   ████ ███████ ██   ██  ██████  ███████     ██   ██  ██████  ███████ ██   ████    ██     
+                                                                                              
+----------------------------------------------------------------------------------------------
+                                                    Since 2025.03.04, Let's study together!
+==============================================================================================
+"""
 
 
-def run_example():
-    """예제 쿼리를 실행합니다."""
-    logger.info("Starting Nexus Agent example...")
-    builder = SupervisorGraphBuilder()
-    app = builder.build()
-    import datetime as dt
+@inject
+def main(graph_builder: SupervisorGraphBuilder = Provide[Container.supervisor_graph]):
+    console.print(logo)
+    logger.info("Starting Nexus Agent service...")
 
-    from langchain_openai import ChatOpenAI
+    ## 그래프 빌더
+    graph_builder.add_node(NaverNewsSearcherNode())
+    graph_builder.add_node(ReportAssistantNode())
+    graph_builder.build()
 
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
-
-    today = dt.datetime.now().strftime("%Y-%m-%d")
-    # answer = app.execute(SimpleState(messages=[("user", f"{today} 일자의 삼성전자 관련 경제 뉴스를 알려줘.")]))
-    answer = app.execute(
-        SupervisorState(
-            llm=llm,
-            messages=[
-                (
-                    "user",
-                    f"{today} 일자의 삼정전자와 관련된 주요 뉴스는 무엇이 있을까? 방송사 CNN의 뉴스 페이지를 참고해서 알려줘",
-                )
-            ],
+    ## API 서버 빌더
+    api_builder = APIBuilder()
+    app = api_builder.create_app()
+    for node in graph_builder.get_nodes():
+        app.add_api_route(
+            f"/api/{node.__class__.__name__.lower().replace('node', '')}",
+            methods=["POST"],
+            endpoint=node.invoke,
         )
-    )
-    # answer = app.execute(SupervisorState(messages=[("user", f"3 더하기 2는?")]))
 
-    # answer = app.execute(
-    #     SupervisorState(
-    #         llm=llm,
-    #         messages=[
-    #             (
-    #                 "user",
-    #                 "네이버의 주식 토론 방에서 삼성전자에 대한 긍정적인 의견을 찾아주고, report.txt 파일을 생성하여 참조 링크 목록을 저장해줘",
-    #             )
-    #         ]
-    #     )
-    # )
-    logger.info(f"Final answer: {answer}")
-
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 
 
 if __name__ == "__main__":
-    
-    parser = argparse.ArgumentParser(
-        description="Nexus Agent - 주식 시장 분석을 위한 AI 에이전트 네트워크"
-    )
-    parser.add_argument("--server", action="store_true", help="백엔드 서버 모드로 실행")
-    parser.add_argument("--example", action="store_true", help="예제 쿼리 실행")
-
-    args = parser.parse_args()
-    print(logo.logo)
-    if args.server:
-        logger.info("Starting Nexus Agent in server mode...")
-        start_server()
-    elif args.example:
-        run_example()
-    else:
-        # 인자가 없으면 예제 실행
-        run_example()
+    container = Container()
+    container.wire(modules=[__name__])
+    main()

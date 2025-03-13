@@ -44,6 +44,7 @@ class Node(ABC):
         self._instance = None
         self._logger_name = f"nexus_agent.nodes.{self.__class__.__name__.lower()}"
         self.logger = setup_logger(self._logger_name)
+        self.DEFAULT_LLM_MODEL = "gpt-4o-mini"
 
     @log_steps
     def __call__(self, *args, **kwargs):
@@ -51,3 +52,9 @@ class Node(ABC):
 
     @abstractmethod
     def _run(self, *args, **kwargs): ...
+
+    @abstractmethod
+    def _invoke(self, query: str): ...
+
+    def invoke(self, query: str):
+        return self._invoke(query)
