@@ -44,6 +44,8 @@ class SupervisorNode(Node):
             },
         )
 
+    def _invoke(self, query: str): ...
+
 
 class Router(TypedDict):
     next: list[str]

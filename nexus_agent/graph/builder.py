@@ -1,15 +1,13 @@
-from langgraph.graph.state import CompiledStateGraph
 from abc import ABC, abstractmethod
 from typing import Any
 from typing_extensions import Self
 
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
-from nexus_agent.graph.nodes.naver_news_searcher import NaverNewsSearcherNode
+from nexus_agent.graph.nodes.base import Node
 from nexus_agent.graph.nodes.websearch import WebSearchNode
 from nexus_agent.graph.nodes import (
     SupervisorNode,
-    ReportAssistantNode,
 )
 from nexus_agent.models.graph import SimpleState, SupervisorState
 from nexus_agent.utils.tools import ToolSet
@@ -18,19 +16,10 @@ from nexus_agent.utils.logger import setup_logger
 logger = setup_logger("nexus_agent")
 
 
-class GraphBuilder:
-    def __init__(cls): ...
-
-    def _build(cls) -> CompiledStateGraph: ...
-
-    def build_from_dict(cls, graph_dict: dict) -> CompiledStateGraph: ...
-
-    def build_from_json(cls, json_path: str) -> CompiledStateGraph: ...
-
-    def build_from_yaml(cls, yaml_path: str) -> CompiledStateGraph: ...
-
-
 class BuilderABC(ABC):
+    def __init__(self):
+        self.logger = setup_logger("nexus_agent")
+
     @abstractmethod
     def build(self) -> Self: ...
 
@@ -44,9 +33,9 @@ class BuilderABC(ABC):
 # TODO: 동적 빌더로 변경
 class LanggraphBuilder(BuilderABC):
     def __init__(self):
+        super().__init__()
         self._builder = None
         self._graph = None
-        self.logger = logger
 
     def build(self) -> Self:
         self.logger.info("Building graph...")
@@ -85,26 +74,32 @@ class LanggraphBuilder(BuilderABC):
 # TODO: 동적 빌더로 변경
 class SupervisorGraphBuilder(BuilderABC):
     def __init__(self):
+        super().__init__()
         self._builder = None
         self._graph = None
-        self.logger = logger
+        self._node_list = []
         # TODO: OPENAI 라이브러리 처리
 
     def build(self) -> Self:
         self.logger.info("Building graph...")
         self._builder = StateGraph(SupervisorState)
-        self._builder.add_node("supervisor", SupervisorNode())
-        # self._builder.add_node("news_searcher", NewsSearcherNode())
-        # self._builder.add_node("community_searcher", CommunitySearcherNode())
-        self._builder.add_node("naver_news_searcher", NaverNewsSearcherNode())
-        self._builder.add_node("report_assistant", ReportAssistantNode())
 
-        self.members = [
-            # "news_searcher",
-            # "community_searcher",
-            "report_assistant",
-            "naver_news_searcher",
-        ]
+        self._builder.add_node("supervisor", SupervisorNode())
+        for node in self._node_list:
+            self._builder.add_node(node.__class__.__name__, node)
+        self.members = list(map(lambda x: x.__class__.__name__, self._node_list))
+
+        # # self._builder.add_node("news_searcher", NewsSearcherNode())
+        # # self._builder.add_node("community_searcher", CommunitySearcherNode())
+        # self._builder.add_node("naver_news_searcher", NaverNewsSearcherNode())
+        # self._builder.add_node("report_assistant", ReportAssistantNode())
+
+        # self.members = [
+        #     # "news_searcher",
+        #     # "community_searcher",
+        #     "report_assistant",
+        #     "naver_news_searcher",
+        # ]
 
         self._builder.add_edge(START, "supervisor")
 
@@ -123,3 +118,57 @@ class SupervisorGraphBuilder(BuilderABC):
         return result
 
     def run(self): ...
+
+    def add_node(self, node: Node):
+        self._node_list.append(node)
+
+    def remove_node(self, node: Node):
+        self._node_list.remove(node)
+
+    def get_nodes(self) -> list[Node]:
+        return self._node_list
+
+    def get_members(self) -> list[str]:
+        return self.members
+
+
+# TODO: 주석 삭제
+# class SupervisorGraphBuilder(BuilderABC):
+#     def __init__(self):
+#         self._builder = None
+#         self._graph = None
+#         self.logger = logger
+
+#     def build(self) -> Self:
+#         self.logger.info("Building graph...")
+#         self._builder = StateGraph(SupervisorState)
+#         self._builder.add_node("supervisor", SupervisorNode())
+#         # self._builder.add_node("news_searcher", NewsSearcherNode())
+#         # self._builder.add_node("community_searcher", CommunitySearcherNode())
+#         self._builder.add_node("naver_news_searcher", NaverNewsSearcherNode())
+#         self._builder.add_node("report_assistant", ReportAssistantNode())
+
+#         self.members = [
+#             # "news_searcher",
+#             # "community_searcher",
+#             "report_assistant",
+#             "naver_news_searcher",
+#         ]
+
+#         self._builder.add_edge(START, "supervisor")
+
+#         self._graph = self._builder.compile()
+
+#         self.logger.info("Graph built successfully")
+#         return self
+
+#     def execute(self, state: SupervisorState) -> Any:
+#         state["members"] = self.members
+
+#         self.logger.info(f"Executing graph with state: {state}")
+#         assert self._graph is not None, "Graph is not built"
+#         result = self._graph.invoke(state)
+#         self.logger.info(f"Execution completed with result: {result}")
+#         return result
+
+#     def run(self): ...

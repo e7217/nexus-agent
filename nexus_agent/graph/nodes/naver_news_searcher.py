@@ -1,3 +1,4 @@
+from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 from langgraph.types import Command
 from langchain_core.messages import HumanMessage
@@ -15,14 +16,15 @@ class NaverNewsSearcherNode(Node):
             "Do nothing else"
         )
         self.agent = None
+        self.tools = [NaverNewsSearch(sort="date")]
 
     def _run(self, state: dict) -> dict:
         if self.agent is None:
-            tools = [NaverNewsSearch(sort="date")]
+            assert state["llm"] is not None, "The State model should include llm"
             llm = state["llm"]
             self.agent = create_react_agent(
                 llm,
-                tools,
+                self.tools,
                 prompt=self.system_prompt,
             )
         result = self.agent.invoke(state)
@@ -38,3 +40,13 @@ class NaverNewsSearcherNode(Node):
             },
             goto="supervisor",
         )
+
+    def _invoke(self, query: str):
+        agent = self.agent or create_react_agent(
+            ChatOpenAI(model=self.DEFAULT_LLM_MODEL),
+            self.tools,
+            prompt=self.system_prompt,
+        )
+        print(query)
+        result = agent.invoke({"messages": [("human", query)]})
+        return result["messages"][-1].content

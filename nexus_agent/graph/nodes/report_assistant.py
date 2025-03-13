@@ -1,3 +1,4 @@
+from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 from langgraph.types import Command
 from langchain_community.tools.file_management.write import WriteFileTool
@@ -10,14 +11,14 @@ class ReportAssistantNode(Node):
     def __init__(self):
         super().__init__()
         self.agent = None
+        self.tools = [WriteFileTool()]
 
     def _run(self, state: dict) -> dict:
         if self.agent is None:
-            tools = [WriteFileTool()]
             llm = state["llm"]
             self.agent = create_react_agent(
                 llm,
-                tools,
+                self.tools,
             )
         result = self.agent.invoke(state)
         return Command(
@@ -30,3 +31,12 @@ class ReportAssistantNode(Node):
             },
             goto="supervisor",
         )
+
+    def _invoke(self, query: str) -> dict:
+        agent = self.agent or create_react_agent(
+            ChatOpenAI(model=self.DEFAULT_LLM_MODEL),
+            self.tools,
+        )
+        print(query)
+        result = agent.invoke({"messages": [("human", query)]})
+        return result["messages"][-1].content
