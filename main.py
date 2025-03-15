@@ -1,8 +1,6 @@
-from functools import partial
 from dotenv import load_dotenv
 
 from dependency_injector.wiring import Provide, inject
-from langchain_openai import ChatOpenAI
 import uvicorn
 
 from api.server import APIBuilder
@@ -55,6 +53,7 @@ def main(
         )
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
 if __name__ == "__main__":
     container = Container()

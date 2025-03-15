@@ -16,6 +16,7 @@ logger = setup_logger("nexus_agent.routes")
 
 router = APIRouter(prefix="/api")
 
+
 @router.get("/")
 async def root():
     """API 상태 확인 엔드포인트"""
@@ -71,4 +72,3 @@ async def process_query(
     except Exception as e:
         logger.error(f"Error processing query: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
-

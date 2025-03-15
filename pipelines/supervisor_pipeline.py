@@ -6,6 +6,7 @@ import requests
 
 APISERVER_HOST = os.getenv("APISERVER_HOST")
 
+
 class RequestBody(BaseModel):
     query: str
     model: str
