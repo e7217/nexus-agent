@@ -1,6 +1,8 @@
+from functools import partial
 from dotenv import load_dotenv
 
 from dependency_injector.wiring import Provide, inject
+from langchain_openai import ChatOpenAI
 import uvicorn
 
 from api.server import APIBuilder
@@ -31,7 +33,9 @@ logo = """
 
 
 @inject
-def main(graph_builder: SupervisorGraphBuilder = Provide[Container.supervisor_graph]):
+def main(
+    graph_builder: SupervisorGraphBuilder = Provide[Container.supervisor_graph],
+):
     console.print(logo)
     logger.info("Starting Nexus Agent service...")
 
@@ -52,8 +56,8 @@ def main(graph_builder: SupervisorGraphBuilder = Provide[Container.supervisor_gr
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
-
 if __name__ == "__main__":
     container = Container()
+    container.wire(modules=["api.routes"])
     container.wire(modules=[__name__])
     main()

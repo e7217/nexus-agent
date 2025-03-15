@@ -16,7 +16,6 @@ logger = setup_logger("nexus_agent.routes")
 
 router = APIRouter(prefix="/api")
 
-
 @router.get("/")
 async def root():
     """API 상태 확인 엔드포인트"""
@@ -33,8 +32,8 @@ async def health_check():
 
 
 # TODO: 의존성 주입 방식이 적절치 않아보임.
-@inject
 @router.post("/query", response_model=QueryResponse)
+@inject
 async def process_query(
     request: QueryRequest,
     graph: Annotated[BuilderABC, Depends(Provide[Container.supervisor_graph])],
@@ -52,7 +51,7 @@ async def process_query(
         logger.info(f"Received query: {request.query}")
 
         # LLM 인스턴스 생성
-        _llm = llm.bind(**request)
+        _llm = llm.bind(**request.model_dump())
         #  ChatOpenAI(model=request.model, temperature=request.temperature)
 
         # 그래프 실행
@@ -72,3 +71,4 @@ async def process_query(
     except Exception as e:
         logger.error(f"Error processing query: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
+

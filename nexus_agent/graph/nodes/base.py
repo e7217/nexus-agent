@@ -3,6 +3,7 @@ from functools import wraps
 import time
 from rich.console import Console
 
+from nexus_agent.models.graph import RawResponse
 from nexus_agent.utils.logger import setup_logger
 
 
@@ -54,7 +55,7 @@ class Node(ABC):
     def _run(self, *args, **kwargs): ...
 
     @abstractmethod
-    def _invoke(self, query: str): ...
+    def _invoke(self, query: str) -> RawResponse: ...
 
-    def invoke(self, query: str):
+    def invoke(self, query: str) -> RawResponse:
         return self._invoke(query)
