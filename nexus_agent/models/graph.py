@@ -1,6 +1,11 @@
 from typing import TypedDict, Annotated, Any
 
 from langgraph.graph import add_messages, MessagesState
+from pydantic import BaseModel
+
+
+class RawResponse(BaseModel):
+    answer: str
 
 
 class SimpleState(TypedDict):

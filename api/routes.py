@@ -33,8 +33,8 @@ async def health_check():
 
 
 # TODO: 의존성 주입 방식이 적절치 않아보임.
-@inject
 @router.post("/query", response_model=QueryResponse)
+@inject
 async def process_query(
     request: QueryRequest,
     graph: Annotated[BuilderABC, Depends(Provide[Container.supervisor_graph])],
@@ -52,7 +52,7 @@ async def process_query(
         logger.info(f"Received query: {request.query}")
 
         # LLM 인스턴스 생성
-        _llm = llm.bind(**request)
+        _llm = llm.bind(**request.model_dump())
         #  ChatOpenAI(model=request.model, temperature=request.temperature)
 
         # 그래프 실행

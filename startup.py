@@ -6,11 +6,11 @@ from nexus_agent.utils.logger import setup_logger
 
 class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
-    logger = providers.Factory(setup_logger, "nexus_agent")
+    logger = providers.Singleton(setup_logger, "nexus_agent")
 
-    supervisor_graph = providers.Factory(SupervisorGraphBuilder)
+    supervisor_graph = providers.Singleton(SupervisorGraphBuilder)
 
-    llm = providers.Factory(ChatOpenAI, model="gpt-4o-mini", temperature=0)
+    llm = providers.Singleton(ChatOpenAI, model="gpt-4o-mini", temperature=0)
 
     # app = providers.Factory(APIBuilder)
     # for node in supervisor_graph.get_nodes():

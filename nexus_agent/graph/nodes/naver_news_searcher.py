@@ -4,6 +4,7 @@ from langgraph.types import Command
 from langchain_core.messages import HumanMessage
 
 from nexus_agent.graph.nodes.base import Node
+from nexus_agent.models.graph import RawResponse
 from nexus_agent.tools.naver.tool import NaverNewsSearch
 
 
@@ -41,12 +42,11 @@ class NaverNewsSearcherNode(Node):
             goto="supervisor",
         )
 
-    def _invoke(self, query: str):
+    def _invoke(self, query: str) -> RawResponse:
         agent = self.agent or create_react_agent(
             ChatOpenAI(model=self.DEFAULT_LLM_MODEL),
             self.tools,
             prompt=self.system_prompt,
         )
-        print(query)
         result = agent.invoke({"messages": [("human", query)]})
-        return result["messages"][-1].content
+        return RawResponse(answer=result["messages"][-1].content)

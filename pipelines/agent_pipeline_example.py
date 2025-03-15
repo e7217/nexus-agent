@@ -1,6 +1,9 @@
+import os
 from typing import List, Union, Generator, Iterator
 from pydantic import BaseModel
 import requests
+
+APISERVER_HOST = os.getenv("APISERVER_HOST")
 
 
 class RequestBody(BaseModel):
@@ -11,7 +14,6 @@ class RequestBody(BaseModel):
 
 class ResponseBody(BaseModel):
     answer: str
-    timestamp: str
 
 
 class Pipeline:
@@ -19,12 +21,9 @@ class Pipeline:
         pass
 
     def __init__(self):
-        # Optionally, you can set the id and name of the pipeline.
-        # Best practice is to not specify the id so that it can be automatically inferred from the filename, so that users can install multiple versions of the same pipeline.
-        # The identifier must be unique across all pipelines.
-        # The identifier must be an alphanumeric string that can include underscores or hyphens. It cannot contain spaces, special characters, slashes, or backslashes.
-        # self.id = "openai_pipeline"
-        self.name = "Market Analysis - News"
+        self.name = "Market Analysis - Naver News Searcher"
+        self.agent_name = "navernewssearcher"
+        self.endpoint = f"http://{APISERVER_HOST}/api/{self.agent_name}"
         pass
 
     async def on_startup(self):
@@ -51,21 +50,14 @@ class Pipeline:
         headers["accept"] = "application/json"
         headers["Content-Type"] = "application/json"
 
-        # payload = {**body}
-        payload = RequestBody(
-            query=user_message, model="gpt-4o-mini", temperature=1.0
-        ).model_dump()
-
         try:
             r = requests.post(
-                url="http://192.168.0.69:8000/api/query",
-                json=payload,
+                url=f"{self.endpoint}?query={user_message}",
+                json={},
                 headers=headers,
-                # stream=True,
             )
 
             r.raise_for_status()
-
             return ResponseBody(**r.json()).answer
         except Exception as e:
             return f"Error: {e}"

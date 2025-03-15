@@ -31,7 +31,9 @@ logo = """
 
 
 @inject
-def main(graph_builder: SupervisorGraphBuilder = Provide[Container.supervisor_graph]):
+def main(
+    graph_builder: SupervisorGraphBuilder = Provide[Container.supervisor_graph],
+):
     console.print(logo)
     logger.info("Starting Nexus Agent service...")
 
@@ -55,5 +57,6 @@ def main(graph_builder: SupervisorGraphBuilder = Provide[Container.supervisor_gr
 
 if __name__ == "__main__":
     container = Container()
+    container.wire(modules=["api.routes"])
     container.wire(modules=[__name__])
     main()

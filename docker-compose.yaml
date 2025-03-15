@@ -35,17 +35,32 @@ services:
     ports:
       - "9099:9099"
     volumes:
-      - pipelines-data:/app/pipelines
+      # - pipelines-data:/app/pipelines
+      - ./pipelines:/app/pipelines
     environment:
+      - APISERVER_HOST=api-server:8000
       - PIPELINES_DIR=/app/pipelines
       # 필요한 경우 특정 파이프라인 URL 추가 (주석 해제 후 사용)
       # - PIPELINES_URLS=https://github.com/open-webui/pipelines/blob/main/examples/filters/detoxify_filter_pipeline.py
     networks:
       - ai-network
 
+  api-server:
+    build:
+      context: .
+      dockerfile: images/api-server/Dockerfile
+    container_name: api-server
+    restart: unless-stopped
+    ports:
+      - "3100:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - ai-network
+
 volumes:
   openwebui-data:
-  pipelines-data:
+  # pipelines-data:
 
 networks:
   ai-network:
