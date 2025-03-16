@@ -18,7 +18,7 @@ COPY requirements.txt .
 COPY uv.lock .
 COPY pyproject.toml .
 COPY ruff.toml .
-COPY .env.template .env
+# COPY .env.template .env
 COPY api/ api/
 COPY nexus_agent/ nexus_agent/
 COPY startup.py .
