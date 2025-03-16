@@ -43,7 +43,7 @@ docs/
 LICENSE
 
 # Development
-*.lock
+# *.lock
 *.toml
 .editorconfig
 .env.template
