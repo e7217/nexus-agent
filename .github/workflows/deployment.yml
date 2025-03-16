@@ -26,14 +26,15 @@ jobs:
           fetch-depth: 0
       
       - name: Set up environment variables
+        shell: pwsh
         run: |
-          cat > .env << EOF
+          @"
           APISERVER_PORT_EXTERNAL=3100
           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}
           NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}
-          EOF
+          "@ | Out-File -FilePath .env -Encoding utf8
       
     #   - name: Login to GitHub Container Registry
     #     uses: docker/login-action@v2
@@ -43,30 +44,37 @@ jobs:
     #       password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Build and tag Docker images
+        shell: pwsh
         run: |
           docker-compose build --no-cache api-server
       
       - name: Stop running containers
+        shell: pwsh
         run: |
-          docker-compose down || true
+          docker-compose down
         continue-on-error: true
       
       - name: Start Docker Compose services
+        shell: pwsh
         run: |
           docker-compose up -d --remove-orphans
       
       - name: Check service health
+        shell: pwsh
         run: |
           # 서비스가 정상적으로 시작되었는지 확인
-          sleep 10
-          if ! curl -s http://localhost:3100/api/health | grep -q "healthy"; then
-            echo "서비스 상태 확인 실패"
+          Start-Sleep -Seconds 20
+          $response = Invoke-WebRequest -Uri "http://localhost:3100/api/health" -UseBasicParsing
+          $content = $response.Content
+          if (-not ($content -match '"status":\s*"healthy"')) {
+            Write-Host "서비스 상태 확인 실패"
             docker-compose logs
             exit 1
-          fi
-          echo "서비스가 정상적으로 배포되었습니다."
+          }
+          Write-Host "서비스가 정상적으로 배포되었습니다."
       
       - name: Clean up old images
+        shell: pwsh
         run: |
           # 사용하지 않는 이미지 정리
           docker image prune -af --filter "until=24h"
