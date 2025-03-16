@@ -14,16 +14,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip install uv
 
 # 프로젝트 파일 복사
-COPY requirements.txt .
-COPY uv.lock .
-COPY pyproject.toml .
-COPY ruff.toml .
-# COPY .env.template .env
-COPY api/ api/
-COPY nexus_agent/ nexus_agent/
-COPY startup.py .
-COPY main.py .
-
+COPY . /app
 # 의존성 설치
 RUN uv sync
 
