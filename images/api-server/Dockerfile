@@ -15,6 +15,8 @@ RUN pip install uv
 
 # 프로젝트 파일 복사
 COPY . /app
+
+RUN ls -la
 # 의존성 설치
 RUN uv sync
 
