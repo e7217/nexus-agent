@@ -31,4 +31,4 @@ RUN uv sync
 EXPOSE 8000
 
 # 실행 명령
-CMD ["uv", "run", "python", "main.py"]
+CMD ["uv", "run", "main.py"]
