@@ -44,7 +44,7 @@ LICENSE
 
 # Development
 # *.lock
-*.toml
+# *.toml
 .editorconfig
 .env.template
 PM/
