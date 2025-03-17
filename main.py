@@ -42,6 +42,7 @@ def main(
     graph_builder.add_node(NaverNewsSearcherNode())
     graph_builder.add_node(ReportAssistantNode())
     graph_builder.add_node(YahooFinanceSearcherNode())
+    # graph_builder.add_node(GoogleFinanceSearcherNode())
     graph_builder.build()
 
     ## API 서버 빌더

@@ -36,7 +36,7 @@ class YahooFinanceSearcherNode(Node):
                 "messages": [
                     HumanMessage(
                         content=result["messages"][-1].content,
-                        name="naver_news_searcher",
+                        name="yahoofinancesearcher",
                     )
                 ]
             },

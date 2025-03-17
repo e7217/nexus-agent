@@ -5,19 +5,19 @@ from langchain_core.messages import HumanMessage
 
 from nexus_agent.graph.nodes.base import Node
 from nexus_agent.models.graph import RawResponse
-from langchain_community.tools.
+from langchain_community.tools.google_finance.tool import GoogleFinanceQueryRun
 
 
-class NaverNewsSearcherNode(Node):
+class GoogleFinanceSearcherNode(Node):
     def __init__(self):
         super().__init__()
         self.system_prompt = (
-            "You are a news search agent for korean news using naver search api."
-            "Only use korean source and data to conduct news search."
+            "You are a finance search agent for US finance using google finance search api."
+            "Only use US source and data to conduct finance search."
             "Do nothing else"
         )
         self.agent = None
-        self.tools = [NaverNewsSearch(sort="date")]
+        self.tools = [GoogleFinanceQueryRun()]
 
     def _run(self, state: dict) -> dict:
         if self.agent is None:
@@ -35,7 +35,7 @@ class NaverNewsSearcherNode(Node):
                 "messages": [
                     HumanMessage(
                         content=result["messages"][-1].content,
-                        name="naver_news_searcher",
+                        name="googlefinancesearcher",
                     )
                 ]
             },

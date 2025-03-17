@@ -35,7 +35,7 @@ class NaverNewsSearcherNode(Node):
                 "messages": [
                     HumanMessage(
                         content=result["messages"][-1].content,
-                        name="naver_news_searcher",
+                        name="navernewssearcher",
                     )
                 ]
             },
