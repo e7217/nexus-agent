@@ -16,6 +16,7 @@ dependencies = [
     "ruff>=0.9.9",
     "tavily-python>=0.5.1",
     "uvicorn>=0.34.0",
+    "yfinance>=0.2.54",
 ]
 
 [dependency-groups]
