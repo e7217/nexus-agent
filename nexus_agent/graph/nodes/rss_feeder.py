@@ -17,7 +17,11 @@ class RSSFeederNode(Node):
             "Do nothing else"
         )
         self.agent = None
-        self.tools = [RSSFeederTool(url="https://www.chosun.com/arc/outboundfeeds/rss/category/economy/?outputType=xml")]
+        self.tools = [
+            RSSFeederTool(
+                url="https://www.chosun.com/arc/outboundfeeds/rss/category/economy/?outputType=xml"
+            )
+        ]
 
     def _run(self, state: dict) -> dict:
         if self.agent is None:
