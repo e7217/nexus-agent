@@ -6,6 +6,7 @@ import uvicorn
 from api.server import APIBuilder
 from nexus_agent.graph.nodes.naver_news_searcher import NaverNewsSearcherNode
 from nexus_agent.graph.nodes.report_assistant import ReportAssistantNode
+from nexus_agent.graph.nodes.rss_feeder import RSSFeederNode
 from nexus_agent.graph.nodes.yahoo_finance_searcher import YahooFinanceSearcherNode
 from nexus_agent.utils.logger import setup_logger
 from nexus_agent.graph.builder import SupervisorGraphBuilder
@@ -42,6 +43,7 @@ def main(
     graph_builder.add_node(NaverNewsSearcherNode())
     graph_builder.add_node(ReportAssistantNode())
     graph_builder.add_node(YahooFinanceSearcherNode())
+    graph_builder.add_node(RSSFeederNode())
     # graph_builder.add_node(GoogleFinanceSearcherNode())
     graph_builder.build()
 
