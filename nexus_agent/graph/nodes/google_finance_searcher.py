@@ -35,7 +35,7 @@ class GoogleFinanceSearcherNode(Node):
                 "messages": [
                     HumanMessage(
                         content=result["messages"][-1].content,
-                        name="googlefinancesearcher",
+                        name=self.__class__.__name__.lower().replace("node", ""),
                     )
                 ]
             },
