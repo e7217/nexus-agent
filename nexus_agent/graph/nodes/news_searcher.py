@@ -32,7 +32,8 @@ class NewsSearcherNode(Node):
             update={
                 "messages": [
                     HumanMessage(
-                        content=result["messages"][-1].content, name="news_searcher"
+                        content=result["messages"][-1].content,
+                        name=self.__class__.__name__.lower().replace("node", ""),
                     )
                 ]
             },

@@ -34,7 +34,7 @@ class CommunitySearcherNode(Node):
                 "messages": [
                     HumanMessage(
                         content=result["messages"][-1].content,
-                        name="community_searcher",
+                        name=self.__class__.__name__.lower().replace("node", ""),
                     )
                 ]
             },
