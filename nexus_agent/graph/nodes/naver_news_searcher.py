@@ -5,7 +5,7 @@ from langchain_core.messages import HumanMessage
 
 from nexus_agent.graph.nodes.base import Node
 from nexus_agent.models.graph import RawResponse
-from nexus_agent.tools.naver.tool import NaverNewsSearch
+from langchain_naver_community.tool import NaverNewsSearch
 
 
 class NaverNewsSearcherNode(Node):

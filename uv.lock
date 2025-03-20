@@ -818,6 +818,20 @@ wheels = [
 ]
 
 [[package]]
+name = "langchain-naver-community"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "langchain" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/40/9b/7e714c27423149e4ac9d6a471bbe768f224ca04127eafbbf0bdcb51354a4/langchain_naver_community-0.1.1.tar.gz", hash = "sha256:14ca8e91f1e43f475bfa4ecaa42186d34f3a9d448fa2d5a035b40f772e04f1e0", size = 114818 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/85/72/fd180b8d251c62c4647263f23626c893d33ac43bdc71ed0e32ced286afe0/langchain_naver_community-0.1.1-py3-none-any.whl", hash = "sha256:d7d727a8554714a46377ee5ce429ba97f04330340a95797d032d146f8abd0f67", size = 5433 },
+]
+
+[[package]]
 name = "langchain-openai"
 version = "0.3.7"
 source = { registry = "https://pypi.org/simple" }
@@ -1228,6 +1242,7 @@ dependencies = [
     { name = "goose3" },
     { name = "langchain" },
     { name = "langchain-community" },
+    { name = "langchain-naver-community" },
     { name = "langchain-openai" },
     { name = "langgraph" },
     { name = "lxml-html-clean" },
@@ -1253,6 +1268,7 @@ requires-dist = [
     { name = "goose3", specifier = ">=3.1.19" },
     { name = "langchain", specifier = ">=0.3.20" },
     { name = "langchain-community", specifier = ">=0.3.19" },
+    { name = "langchain-naver-community", specifier = ">=0.1.1" },
     { name = "langchain-openai", specifier = ">=0.3.7" },
     { name = "langgraph", specifier = ">=0.3.5" },
     { name = "lxml-html-clean", specifier = ">=0.4.1" },

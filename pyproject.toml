@@ -11,6 +11,7 @@ dependencies = [
     "goose3>=3.1.19",
     "langchain>=0.3.20",
     "langchain-community>=0.3.19",
+    "langchain-naver-community>=0.1.1",
     "langchain-openai>=0.3.7",
     "langgraph>=0.3.5",
     "lxml-html-clean>=0.4.1",

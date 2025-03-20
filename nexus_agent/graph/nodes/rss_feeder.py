@@ -7,8 +7,8 @@ from nexus_agent.graph.nodes.base import Node
 from nexus_agent.models.graph import RawResponse
 from nexus_agent.tools.rss.tool import RSSFeederTool
 
+class RSSFeederBase(Node):
 
-class RSSFeederNode(Node):
     def __init__(self):
         super().__init__()
         self.system_prompt = (
@@ -54,3 +54,35 @@ class RSSFeederNode(Node):
         )
         result = agent.invoke({"messages": [("human", query)]})
         return RawResponse(answer=result["messages"][-1].content)
+
+
+class ChosunRSSFeederNode(RSSFeederBase):
+    def __init__(self):
+        super().__init__()
+        self.tools = [
+            RSSFeederTool(
+                url="https://www.chosun.com/arc/outboundfeeds/rss/category/economy/?outputType=xml"
+            )
+        ]
+
+
+class WSJEconomyRSSFeederNode(RSSFeederBase):
+    def __init__(self):
+        super().__init__()
+        self.tools = [
+            RSSFeederTool(
+                url="https://feeds.content.dowjones.io/public/rss/socialeconomyfeed"
+            )
+        ]
+
+
+class WSJMarketRSSFeederNode(RSSFeederBase):
+    def __init__(self):
+        super().__init__()
+        self.tools = [
+            RSSFeederTool(
+                url="https://feeds.content.dowjones.io/public/rss/RSSMarketsMain"
+            )
+        ]
+
+
